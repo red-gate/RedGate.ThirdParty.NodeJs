@@ -1,0 +1,81 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!-- UnpackSfx task definition. Unpacks a 7-zip self-extracting archive to a specified folder. -->
+    <UsingTask TaskName="UnpackSfx"
+               TaskFactory="CodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <!-- The path of the self-extracting 7-zip archive. -->
+            <ArchivePath ParameterType="System.String" Required="true" />
+            <!-- The path of the output folder to extract the archive to. -->
+            <OutputDir ParameterType="System.String" Required="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System" />
+            <Using Namespace="System.Diagnostics" />
+            <Using Namespace="System.IO" />
+            <Using Namespace="System.Text.RegularExpressions" />
+            <Using Namespace="System.Threading" />
+            
+            <Code Type="Fragment" Language="cs"><![CDATA[
+            var mutexName = @"Global\NodeJsExtractDir-"
+                            + Regex.Replace(OutputDir.ToLowerInvariant(), "[^a-z0-9]", "-");
+            using (var mutex = new Mutex(false, mutexName))
+            {
+                // Acquire the mutex.
+                mutex.WaitOne();
+
+                try
+                {
+                    // Only proceed if the archive hasn't previously been extracted.
+                    var markerFile = Path.Combine(OutputDir, ".extracted");
+                    if (!File.Exists(markerFile))
+                    {
+                        // Launch the self-extracting archive and wait for it to complete.
+                        var startInfo =
+                            new ProcessStartInfo
+                            {
+                                FileName = ArchivePath,
+                                Arguments = string.Format("-y -o\"{0}\"", OutputDir),
+                                ErrorDialog = false,
+                                UseShellExecute = false,
+                                CreateNoWindow = true
+                            };
+                        var process = Process.Start(startInfo);
+                        process.WaitForExit();
+
+                        // Make sure it completed successfully.
+                        if (process.ExitCode != 0)
+                        {
+                            throw new ApplicationException
+                                (string.Format("Process {0} terminated with exit code {1}.",
+                                               ArchivePath,
+                                               process.ExitCode));
+                        }
+
+                        // And finally write the marker file to indicate that the
+                        // archive has been successfully extracted.
+                        File.WriteAllText
+                            (markerFile, "Extracted on " + DateTime.UtcNow.ToString("u"));
+                    }
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
+            }
+            ]]></Code>
+        </Task>
+    </UsingTask>
+
+    <!-- Unpack the NodeJs archive. -->
+    <Target Name="UnpackNodeJs"
+            BeforeTargets="PrepareForBuild"
+            Inputs="$(NodeJsSfxPath)"
+            Outputs="$(NodeJsPath); $(NpmPath)">
+        <UnpackSfx ArchivePath="$(NodeJsSfxPath)" OutputDir="$(NodeJsDir)" />
+<!--
+        <Exec Condition="Exists('$(NodeJsSfxPath)')" Command='"$(NodeJsSfxPath)" -y -o"$(NodeJsDir)"' />
+        <Delete Condition="Exists('$(NodeJsSfxPath)')" Files="$(NodeJsSfxPath)" />
+-->        
+    </Target>
+</Project>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RedGate.ThirdParty.NodeJs</id>
+    <version>$version$</version>
+    <title>RedGate.ThirdParty.NodeJs</title>
+    <authors>Joyent, Inc</authors>
+    <owners>Redgate</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>The 64-bit Node.js Windows binaries, including both node and npm.</summary>
+    <description>This is a bundling of the files installed by the standard 64-bit Windows installer for Node.js. It includes the node.exe binary and the npm.cmd command.</description>
+    <language>en-us</language>
+    <copyright>Joyent, Inc</copyright>
+    <tags>nodejs npm</tags>
+    <developmentDependency>true</developmentDependency>
+  </metadata>
+  <files>
+    <file src="dist\nodejs-sfx.exe" target="tools" />
+    <file src="RedGate.ThirdParty.NodeJs.props" target="build" />
+    <file src="RedGate.ThirdParty.NodeJs.targets" target="build" />
+  </files>
+</package>
