@@ -7,7 +7,7 @@ param([string]$Configuration = 'Release')
 use 14.0 MSBuild
 
 # Useful paths used by  tasks.
-$script:NodeJsDir = 'C:\Program Files\nodejs\'
+$script:NodeJsDir = "$env:ProgramFiles\nodejs\"
 $script:RepositoryRoot = "$PsScriptRoot\.." | Resolve-Path
 $script:NuGetPath = "$PsScriptRoot\nuget.exe" | Resolve-Path
 $script:DistDir = "$RepositoryRoot\dist"
@@ -52,7 +52,12 @@ task Clean  {
 task Compress  Init, {
     Write-Info 'Compressing nodejs files'
 
-    Start-Process -FilePath 'C:\Program Files\7-Zip\7z.exe' `
+    $SevenZipPath = "$env:ProgramFiles\7-Zip\7z.exe"
+    if (-not (Test-Path $SevenZipPath)) {
+        throw "File not found: $SevenZipPath`r`nThis script requires the 64-bit version of 7-zip to be installed on this machine."
+    }
+
+    Start-Process -FilePath $SevenZipPath `
                   -ArgumentList @('a', '-bb3', '-r', '-sfx', "$DistDir\nodejs-sfx.exe", "*") `
                   -WorkingDirectory $NodeJsDir `
                   -NoNewWindow `
@@ -90,5 +95,4 @@ task Package  Compress,  {
 
 
 task Build  Package
-task Rebuild  Clean, Build
 task Default  Build
