@@ -4,13 +4,14 @@
     <id>RedGate.ThirdParty.NodeJs</id>
     <version>$version$</version>
     <title>RedGate.ThirdParty.NodeJs</title>
-    <authors>Joyent, Inc</authors>
+    <authors>Chris Lambrou</authors>
     <owners>Redgate</owners>
+    <projectUrl>https://github.com/red-gate/RedGate.ThirdParty.NodeJs</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>The 64-bit Node.js Windows binaries, including both node and npm.</summary>
-    <description>This is a bundling of the files installed by the standard 64-bit Windows installer for Node.js. It includes the node.exe binary and the npm.cmd command.</description>
+    <description>This is a bundling of the files installed by the standard 64-bit Windows installer for [Node.js](https://nodejs.org/), including both the node.exe and npm.cmd commands. When imported into a project, this establishes four useful build properties: NodeJsVersion, the version number of nodejs (e.g. "5.10.1"); NodeJsDir, the path of the folder that nodejs is extracted to (e.g. "C:\Tools\NodeJs\5.10.1"); NodeJsPath, the path of nodejs.exe (e.g. "C:\Tools\NodeJs\5.10.1\node.exe"); and NpmPath, the path of npm.cmd (e.g. "C:\Tools\NodeJs\5.10.1\npm.cmd").</description>
     <language>en-us</language>
-    <copyright>Joyent, Inc</copyright>
+    <copyright>Joyent, Inc. (nodejs), Red Gate Software Ltd (NuGet packaging)</copyright>
     <tags>nodejs npm</tags>
     <developmentDependency>true</developmentDependency>
   </metadata>
