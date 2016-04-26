@@ -18,4 +18,21 @@ To avoid problems with the 256 character limit of paths on NTFS, nodejs is extra
 
 1. Your own builds should not modify the contents of the extracted nodejs. To do so risks multiple builds interfering with each other. For example, don't try to install any npm packages globally.
 2. The build target that extracts nodejs is thread safe. A global mutext is used to ensure that multiple builds will not attempt to extract nodejs at the same time.
-          
+
+## How this repository works
+
+### Prerequisites
+
+To build the `RedGate.ThirdParty.NodeJs`, you need to satisfy the following:
+
+- Have the 64-bit Windows version of nodejs cleanly installed to `C:\Program Files\nodejs\'
+- Have the 64-bit version of 7-zip installed.
+
+### Run the build script.
+
+1. From a PowerShell console, run the `.build\_init.ps1` script. This will establish three global functions, `Build`, `Clean` and `Rebuild`.
+2. From the same console, invoke `Build`. This will produce a `dist` sub-folder that contains both the newly built NuGet package.
+
+## Support
+
+Questions, bug reports and pull requests can be submitted on the [project's GitHub page](https://github.com/red-gate/RedGate.ThirdParty.NodeJs/). If you are internal to Redgate, you can also post on the [#build](https://redgate.slack.com/messages/build/) Slack channel.      
