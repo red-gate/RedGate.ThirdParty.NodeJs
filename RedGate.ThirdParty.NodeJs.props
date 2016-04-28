@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
+        <!-- The bundled version of nodejs. -->
         <NodeJsVersion>5.10.1</NodeJsVersion>
-        <NodeJsSfxPath>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\tools\nodejs-sfx.exe'))</NodeJsSfxPath>
         
         <!-- Establish NodeJsDir. -->
         <NodeJsDir Condition="'$(NodeJsDir)' == ''">$(SystemDrive)\Tools\NodeJs\$(NodeJsVersion)\</NodeJsDir>

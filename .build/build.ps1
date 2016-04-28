@@ -1,13 +1,17 @@
 # This file cannot be invoked directly; it simply contains a bunch of Invoke-Build tasks. To use it, invoke
 # _init.ps1 which declares three global functions (build, clean, rebuild), then invoke one of those functions.
 
-[CmdletBinding()]
-param([string]$Configuration = 'Release')
-
 use 14.0 MSBuild
 
+# NuGet package build number. Translates to the fourth digit in the NuGet package version,
+# so that we can build multiple versions of this package that share the same version of nodejs.
+# This assumes that the nodejs version will contain exactly three digits. When bumping the version number
+# of nodejs, this should be reset to 0. When making a new release of this package, this value should be
+# incremented.
+$PackageBuildNumber = 0
+
 # Useful paths used by  tasks.
-$script:NodeJsDir = "$env:ProgramFiles\nodejs\"
+$script:NodeJsDir = "$env:SystemDrive\Program Files\nodejs\"
 $script:RepositoryRoot = "$PsScriptRoot\.." | Resolve-Path
 $script:NuGetPath = "$PsScriptRoot\nuget.exe" | Resolve-Path
 $script:DistDir = "$RepositoryRoot\dist"
@@ -29,12 +33,16 @@ task Init  {
         throw "node.exe file not found at $NodeJsPath"
     }
 
-    # Extract the package version number from node.exe
-    $script:Version = (Get-Item $NodeJsPath).VersionInfo.ProductVersion
-    if (-not $Version) {
+    # Extract the node version number from node.exe
+    $script:NodeVersion = (Get-Item $NodeJsPath).VersionInfo.ProductVersion
+    if (-not $NodeVersion) {
         throw "Unable to retrieve the version number from $NodeJsPath"
     }
-    Write-Info "Version = $Version"
+    Write-Info "Node version = $NodeVersion"
+
+    # Establish the package version.
+    $script:PackageVersion = "$NodeVersion.$PackageBuildNumber"
+    Write-Info "Package version = $PackageVersion"
 }
 
 
@@ -52,13 +60,13 @@ task Clean  {
 task Compress  Init, {
     Write-Info 'Compressing nodejs files'
 
-    $SevenZipPath = "$env:ProgramFiles\7-Zip\7z.exe"
+    $SevenZipPath = "$env:SystemDrive\Program Files\7-Zip\7z.exe"
     if (-not (Test-Path $SevenZipPath)) {
         throw "File not found: $SevenZipPath`r`nThis script requires the 64-bit version of 7-zip to be installed on this machine."
     }
 
     Start-Process -FilePath $SevenZipPath `
-                  -ArgumentList @('a', '-bb3', '-r', '-sfx', "$DistDir\nodejs-sfx.exe", "*") `
+                  -ArgumentList @('a', '-bb3', '-r', '-sfx', "$DistDir\nodejs-sfx.exe", '*') `
                   -WorkingDirectory $NodeJsDir `
                   -NoNewWindow `
                   -Wait
@@ -72,7 +80,7 @@ task Package  Compress,  {
     $PropsFilePath = "$RepositoryRoot\RedGate.ThirdParty.NodeJs.props"
     $Encoding = New-Object 'System.Text.UTF8Encoding' $False
     $OriginalContents = [System.IO.File]::ReadAllText($PropsFilePath, $Encoding)
-    $NewContents = $OriginalContents -replace '(?<=\<NodeJsVersion\>).*?(?=\</NodeJsVersion\>)', $Version.ToString()
+    $NewContents = $OriginalContents -replace '(?<=\<NodeJsVersion\>).*?(?=\</NodeJsVersion\>)', $NodeVersion.ToString()
     [System.IO.File]::WriteAllText($PropsFilePath, $NewContents, $Encoding)
 
     # Run NuGet pack.
@@ -81,7 +89,7 @@ task Package  Compress,  {
         $Parameters = @(
             'pack',
             "$NuSpecPath",
-            '-Version', $Version,
+            '-Version', $PackageVersion,
             '-OutputDirectory', $DistDir
         )
         & $NuGetPath $Parameters
@@ -95,4 +103,5 @@ task Package  Compress,  {
 
 
 task Build  Package
+task Rebuild  Clean, Build
 task Default  Build
