@@ -14,7 +14,9 @@
     <copyright>Joyent, Inc. (nodejs), Red Gate Software Ltd (NuGet packaging)</copyright>
     <tags>nodejs npm</tags>
     <developmentDependency>true</developmentDependency>
-    <releaseNotes>v5.10.1.1 - Ported the work of the msbuild task to PowerShell, to enable it to be directly invoked outside of msbuild, such as by a RedGate.Build cmdlet.
+    <releaseNotes>v6.0.0.0 - Updated nodejs to version 6.0.0.
+
+v5.10.1.1 - Ported the work of the msbuild task to PowerShell, to enable it to be directly invoked outside of msbuild, such as by a RedGate.Build cmdlet.
 
 v5.10.1 - First public release. Bundles nodejs 5.10.1.</releaseNotes>
   </metadata>
