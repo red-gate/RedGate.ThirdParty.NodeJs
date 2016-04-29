@@ -8,10 +8,10 @@ use 14.0 MSBuild
 # This assumes that the nodejs version will contain exactly three digits. When bumping the version number
 # of nodejs, this should be reset to 0. When making a new release of this package, this value should be
 # incremented.
-$PackageBuildNumber = 1
+$PackageBuildNumber = 0
 
 # Useful paths used by  tasks.
-$script:NodeJsDir = "$env:ProgramFiles\nodejs\"
+$script:NodeJsDir = "$env:SystemDrive\Program Files\nodejs\"
 $script:RepositoryRoot = "$PsScriptRoot\.." | Resolve-Path
 $script:NuGetPath = "$PsScriptRoot\nuget.exe" | Resolve-Path
 $script:DistDir = "$RepositoryRoot\dist"
@@ -60,7 +60,7 @@ task Clean  {
 task Compress  Init, {
     Write-Info 'Compressing nodejs files'
 
-    $SevenZipPath = "$env:ProgramFiles\7-Zip\7z.exe"
+    $SevenZipPath = "$env:SystemDrive\Program Files\7-Zip\7z.exe"
     if (-not (Test-Path $SevenZipPath)) {
         throw "File not found: $SevenZipPath`r`nThis script requires the 64-bit version of 7-zip to be installed on this machine."
     }
