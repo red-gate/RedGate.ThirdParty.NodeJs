@@ -8,7 +8,7 @@ use 14.0 MSBuild
 # This assumes that the nodejs version will contain exactly three digits. When bumping the version number
 # of nodejs, this should be reset to 0. When making a new release of this package, this value should be
 # incremented.
-$PackageBuildNumber = 0
+$PackageBuildNumber = 1
 
 # Useful paths used by  tasks.
 $script:NodeJsDir = "$env:SystemDrive\Program Files\nodejs\"

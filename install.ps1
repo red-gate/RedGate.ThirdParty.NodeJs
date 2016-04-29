@@ -15,12 +15,12 @@ Write-Verbose "Output dir: $OutputDir"
 $MutexName = "Global\NodeJsExtractDir-$($OutputDir.ToLowerInvariant() -replace '[^a-z0-9]', '-')"
 
 # Create the mutex.
-$SecurityIdentifier = [System.Security.Principal.SecurityIdentifier]::new([System.Security.Principal.WellKnownSidType]::WorldSid, $Null)
-$AllowEveryoneRule = [System.Security.AccessControl.MutexAccessRule]::new($SecurityIdentifier, [System.Security.AccessControl.MutexRights]::FullControl, [System.Security.AccessControl.AccessControlType]::Allow);
-$MutexSecurity = [System.Security.AccessControl.MutexSecurity]::new()
+$SecurityIdentifier = New-Object -TypeName 'System.Security.Principal.SecurityIdentifier' -ArgumentList ([System.Security.Principal.WellKnownSidType]::WorldSid, $Null)
+$AllowEveryoneRule = New-Object -TypeName 'System.Security.AccessControl.MutexAccessRule' -ArgumentList ($SecurityIdentifier, [System.Security.AccessControl.MutexRights]::FullControl, [System.Security.AccessControl.AccessControlType]::Allow)
+$MutexSecurity = New-Object -TypeName 'System.Security.AccessControl.MutexSecurity'
 $MutexSecurity.AddAccessRule($AllowEveryoneRule)
 [bool] $CreatedNew = $False
-$Mutex = [System.Threading.Mutex]::new($False, $MutexName, [ref] $CreatedNew, $MutexSecurity)
+$Mutex = New-Object -TypeName 'System.Threading.Mutex' -ArgumentList ($False, $MutexName, [ref] $CreatedNew, $MutexSecurity)
 
 try {
     # Acquire the mutex.
