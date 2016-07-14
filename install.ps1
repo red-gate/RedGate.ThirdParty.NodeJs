@@ -38,7 +38,7 @@ try {
 
             # Extract nodejs from the self-extracting archive file.
             Write-Verbose "Extracting nodejs to $OutputDir"
-            & $ArchivePath -y -o"$OutputDir"
+            & $ArchivePath -y -o "$OutputDir"
 
             # Make sure it completed successfully.
             if ($LastExitCode -ne 0) {
