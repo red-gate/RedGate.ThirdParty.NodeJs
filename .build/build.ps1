@@ -65,11 +65,16 @@ task Compress  Init, {
         throw "File not found: $SevenZipPath`r`nThis script requires the 64-bit version of 7-zip to be installed on this machine."
     }
 
-    Start-Process -FilePath $SevenZipPath `
-                  -ArgumentList @('a', '-bb3', '-r', '-sfx', "$DistDir\nodejs-sfx.exe", '*') `
-                  -WorkingDirectory $NodeJsDir `
-                  -NoNewWindow `
-                  -Wait
+    $process = Start-Process -FilePath $SevenZipPath `
+        -ArgumentList @('a', '-bb3', '-r', '-sfx', "$DistDir\nodejs-sfx.exe", '*') `
+        -WorkingDirectory $NodeJsDir `
+        -NoNewWindow `
+        -PassThru `
+        -Wait
+
+    if($process.ExitCode -ne 0) {
+        exit $process.ExitCode
+    }
 }
 
 
