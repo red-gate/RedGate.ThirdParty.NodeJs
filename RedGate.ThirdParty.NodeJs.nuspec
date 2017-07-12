@@ -14,7 +14,9 @@
     <copyright>Joyent, Inc. (nodejs), Red Gate Software Ltd (NuGet packaging)</copyright>
     <tags>nodejs npm</tags>
     <developmentDependency>true</developmentDependency>
-    <releaseNotes>v6.10.3.0 - Updated nodejs to 6.10.3.
+    <releaseNotes>v6.11.1.0 - Updated nodejs to 6.11.1 and npm to 5.2.0.
+
+v6.10.3.0 - Updated nodejs to 6.10.3.
 
 v6.0.0.1 - Removed some PowerShell 5 specific code. Should now work in PowerShell 4.
 
