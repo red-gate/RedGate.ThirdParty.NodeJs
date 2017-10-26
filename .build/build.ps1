@@ -1,8 +1,6 @@
 # This file cannot be invoked directly; it simply contains a bunch of Invoke-Build tasks. To use it, invoke
 # _init.ps1 which declares three global functions (build, clean, rebuild), then invoke one of those functions.
 
-use 14.0 MSBuild
-
 # NuGet package build number. Translates to the fourth digit in the NuGet package version,
 # so that we can build multiple versions of this package that share the same version of nodejs.
 # This assumes that the nodejs version will contain exactly three digits. When bumping the version number
