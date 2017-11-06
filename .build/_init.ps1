@@ -19,11 +19,10 @@ function global:Build
     try
     {
         # Obtain nuget.exe
-        $NuGetVersion = [version] '3.3.0'
         $NuGetPath = '.\nuget.exe'
-        if (-not (Test-Path $NuGetPath) -or (Get-Item $NuGetPath).VersionInfo.ProductVersion -ne $NuGetVersion)
+        if (-not (Test-Path $NuGetPath))
         {
-            $NuGetUrl = "https://dist.nuget.org/win-x86-commandline/v$NuGetVersion/nuget.exe"
+            $NuGetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
             Write-Host "Downloading $NuGetUrl"
             Invoke-WebRequest $NuGetUrl -OutFile $NuGetPath
         }
