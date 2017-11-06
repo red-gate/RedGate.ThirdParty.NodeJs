@@ -28,20 +28,14 @@ function global:Build
         }
         
         # Install the RedGate.Build module.
-        $RedGateBuildVersion = '0.1.162'
-        & $NuGetPath install 'RedGate.Build' `
-            -Version $RedGateBuildVersion `
-            -OutputDirectory 'packages' `
-            -PackageSaveMode nuspec
+        & $NuGetPath install 'RedGate.Build' -OutputDirectory 'packages' -ExcludeVersion
+        & $NuGetPath install 'Invoke-Build'  -OutputDirectory 'packages' -ExcludeVersion
 
         # Import the RedGate.Build module.
-        Import-Module ".\packages\RedGate.Build.$RedGateBuildVersion\tools\RedGate.Build.psm1" -Force
-
-        # Install Invoke-Build
-        $InvokeBuildDir = Install-Package -Name 'Invoke-Build' -Version '2.12.2'
+        Import-Module ".\packages\RedGate.Build\tools\RedGate.Build.psm1" -Force
 
         # Call the actual build script.
-        & "$InvokeBuildDir\tools\Invoke-Build.ps1" -File '.\build.ps1' -Task $Task
+        & ".\packages\Invoke-Build\tools\Invoke-Build.ps1" -File '.\build.ps1' -Task $Task
     }
     finally
     {
