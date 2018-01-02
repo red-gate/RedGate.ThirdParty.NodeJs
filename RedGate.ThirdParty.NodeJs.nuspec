@@ -14,7 +14,11 @@
     <copyright>Joyent, Inc. (nodejs), Red Gate Software Ltd (NuGet packaging)</copyright>
     <tags>nodejs npm</tags>
     <developmentDependency>true</developmentDependency>
-    <releaseNotes>v6.11.5.0 - Updated nodejs to 6.11.5 and npm to 5.5.1
+    <releaseNotes>v8.9.3.0 - Updated nodejs to 8.9.3 and npm to 5.5.1.
+
+v8.9.2.0 - Updated nodejs to 8.9.2 and npm to 5.5.1.
+
+v6.11.5.0 - Updated nodejs to 6.11.5 and npm to 5.5.1
 
 v6.11.2.0 - Updated nodejs to 6.11.2 and npm to 5.3.0.
 
