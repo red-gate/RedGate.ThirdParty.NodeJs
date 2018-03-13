@@ -14,7 +14,9 @@
     <copyright>Joyent, Inc. (nodejs), Red Gate Software Ltd (NuGet packaging)</copyright>
     <tags>nodejs npm</tags>
     <developmentDependency>true</developmentDependency>
-    <releaseNotes>v8.9.3.0 - Updated nodejs to 8.9.3 and npm to 5.5.1.
+    <releaseNotes>v8.10.0.0 - Updated nodejs to 8.10.0 and npm to 5.6.0.
+
+v8.9.3.0 - Updated nodejs to 8.9.3 and npm to 5.5.1.
 
 v8.9.2.0 - Updated nodejs to 8.9.2 and npm to 5.5.1.
 
